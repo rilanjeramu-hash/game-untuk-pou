@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Tebak Angka</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 380px;
+        }
+        h1 {
+            color: #1e293b;
+            margin-top: 0;
+            font-size: 24px;
+        }
+        p.deskripsi {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            width: 110px;
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        input[type="number"]:focus {
+            border-color: #3b82f6;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #tombolTebak {
+            background-color: #3b82f6;
+            color: white;
+        }
+        #tombolTebak:hover:not(:disabled) {
+            background-color: #2563eb;
+        }
+        #tombolTebak:disabled {
+            background-color: #94a3b8;
+            cursor: not-allowed;
+        }
+        #tombolReset {
+            background-color: #10b981;
+            color: white;
+            width: 100%;
+            margin-top: 15px;
+            display: none; /* Disembunyikan sampai game selesai */
+        }
+        #tombolReset:hover {
+            background-color: #059669;
+        }
+        #petunjuk {
+            font-size: 16px;
+            font-weight: bold;
+            min-height: 24px;
+            margin: 10px 0;
+        }
+        .rendah { color: #d97706; }
+        .tinggi { color: #dc2626; }
+        .benar { color: #16a34a; }
+        .info-percobaan {
+            font-size: 13px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Tebak Angka</h1>
+    <p class="deskripsi">Saya memikirkan angka antara <strong>1 sampai 100</strong>. Bisakah kamu menebaknya?</p>
+    
+    <div class="input-group">
+        <input type="number" id="inputTebakan" min="1" max="100" placeholder="1-100">
+        <button id="tombolTebak">Tebak</button>
+    </div>
+
+    <div id="petunjuk"></div>
+    <div class="info-percobaan">Jumlah percobaan: <span id="jumlahPercobaan">0</span></div>
+
+    <button id="tombolReset">Main Lagi</button>
+</div>
+
+<script>
+    // Inisialisasi variabel game
+    let angkaRahasia = Math.floor(Math.random() * 100) + 1;
+    let percobaan = 0;
+
+    // Mengambil elemen HTML
+    const inputTebakan = document.getElementById('inputTebakan');
+    const tombolTebak = document.getElementById('tombolTebak');
+    const tombolReset = document.getElementById('tombolReset');
+    const petunjuk = document.getElementById('petunjuk');
+    const spanPercobaan = document.getElementById('jumlahPercobaan');
+
+    // Fungsi untuk mengecek tebakan
+    function cekTebakan() {
+        const tebakan = Number(inputTebakan.value);
+
+        // Validasi input
+        if (!tebakan || tebakan < 1 || tebakan > 100) {
+            petunjuk.textContent = "Masukkan angka yang valid antara 1 dan 100!";
+            petunjuk.className = "tinggi";
+            return;
+        }
+
+        percobaan++;
+        spanPercobaan.textContent = percobaan;
+
+        if (tebakan === angkaRahasia) {
+            petunjuk.textContent = `Selamat! Angkanya adalah ${angkaRahasia}.`;
+            petunjuk.className = "benar";
+            selesaiGame();
+        } else if (tebakan < angkaRahasia) {
+            petunjuk.textContent = "Terlalu rendah! Coba angka lebih besar.";
+            petunjuk.className = "rendah";
+        } else {
+            petunjuk.textContent = "Terlalu tinggi! Coba angka lebih kecil.";
+            petunjuk.className = "tinggi";
+        }
+
+        // Kosongkan input dan fokuskan kembali kursor
+        inputTebakan.value = "";
+        inputTebakan.focus();
+    }
+
+    // Fungsi saat pemain berhasil menebak
+    function selesaiGame() {
+        inputTebakan.disabled = true;
+        tombolTebak.disabled = true;
+        tombolReset.style.display = "block";
+    }
+
+    // Fungsi untuk mengulang permainan
+    function resetGame() {
+        angkaRahasia = Math.floor(Math.random() * 100) + 1;
+        percobaan = 0;
+        spanPercobaan.textContent = percobaan;
+        petunjuk.textContent = "";
+        petunjuk.className = "";
+        
+        inputTebakan.disabled = false;
+        tombolTebak.disabled = false;
+        inputTebakan.value = "";
+        inputTebakan.focus();
+        
+        tombolReset.style.display = "none";
+    }
+
+    // Event listener untuk tombol dan tombol Enter pada keyboard
+    tombolTebak.addEventListener('click', cekTebakan);
+    tombolReset.addEventListener('click', resetGame);
+    
+    inputTebakan.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            cekTebakan();
+        }
+    });
+</script>
+
+</body>
+</html>
