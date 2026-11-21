@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Tebak Angka</title>
+    <title>Game Tebak Angka untuk orang poke</title>
     <style>
         * {
             box-sizing: border-box;
@@ -104,7 +104,7 @@
 
 <div class="container">
     <h1>Tebak Angka</h1>
-    <p class="deskripsi">Saya memikirkan angka antara <strong>1 sampai 100</strong>. Bisakah kamu menebaknya?</p>
+    <p class="deskripsi">Saya memikirkan angka antara <strong>1 sampai 100</strong>. nganceng lau tebak ko?</p>
     
     <div class="input-group">
         <input type="number" id="inputTebakan" min="1" max="100" placeholder="1-100">
@@ -148,10 +148,10 @@
             petunjuk.className = "benar";
             selesaiGame();
         } else if (tebakan < angkaRahasia) {
-            petunjuk.textContent = "Terlalu rendah! Coba angka lebih besar.";
+            petunjuk.textContent = "Terlalu rendah pou! bodok terus kat.";
             petunjuk.className = "rendah";
         } else {
-            petunjuk.textContent = "Terlalu tinggi! Coba angka lebih kecil.";
+            petunjuk.textContent = "Terlalu tinggi poke! bangang e ae.";
             petunjuk.className = "tinggi";
         }
 
